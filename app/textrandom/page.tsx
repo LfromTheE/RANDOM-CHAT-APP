@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import io from "socket.io-client";
 
-const socket = io();
+const socket = io("https://random-chat-app-six.vercel.app/");
 
 export default function TextRandomChat() {
   const [messages, setMessages] = useState<string[]>([]);
@@ -44,35 +44,69 @@ export default function TextRandomChat() {
   };
 
   return (
-    <div>
-      <h1>일반 텍스트 랜덤 채팅</h1>
+    <div style={{ maxWidth: "60%", margin: "0 auto", paddingTop: "20px" }}>
       {!connected ? (
         <button onClick={startChat}>채팅 시작하기</button>
       ) : (
-        <div>
+        <div
+          style={{
+            position: "relative",
+            border: "1px solid #ccc",
+            borderRadius: "8px",
+            padding: "10px",
+          }}
+        >
+          {/* 채팅 종료 버튼 */}
+          <button
+            onClick={endChat}
+            style={{
+              position: "absolute",
+              top: "10px",
+              right: "10px",
+              fontSize: "0.9em",
+            }}
+          >
+            채팅 종료
+          </button>
+
+          {/* 메시지 표시 창 */}
           <div
             style={{
-              border: "1px solid #ccc",
+              height: "300px",
+              overflowY: "auto",
               padding: "10px",
-              maxHeight: "300px",
-              overflowY: "scroll",
+              border: "1px solid #ddd",
+              borderRadius: "4px",
+              marginBottom: "10px",
+              backgroundColor: "#f9f9f9",
             }}
           >
             {messages.map((msg, index) => (
-              <div key={index}>{msg}</div>
+              <div key={index} style={{ marginBottom: "5px" }}>
+                {msg}
+              </div>
             ))}
           </div>
-          <input
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyPress={(e) => e.key === "Enter" && sendMessage()}
-            placeholder="메시지를 입력하세요..."
-          />
-          <button onClick={sendMessage}>전송</button>
-          <button onClick={endChat} style={{ marginTop: "10px" }}>
-            채팅 종료
-          </button>
+
+          {/* 메시지 입력 창 */}
+          <div style={{ display: "flex", gap: "5px" }}>
+            <input
+              type="text"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyPress={(e) => e.key === "Enter" && sendMessage()}
+              placeholder="메시지를 입력하세요..."
+              style={{
+                flex: "1",
+                padding: "8px",
+                borderRadius: "4px",
+                border: "1px solid #ccc",
+              }}
+            />
+            <button onClick={sendMessage} style={{ padding: "8px 12px" }}>
+              전송
+            </button>
+          </div>
         </div>
       )}
     </div>
